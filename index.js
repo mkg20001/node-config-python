@@ -1,7 +1,9 @@
 'use strict'
 
-var fs = require('fs')
-var sfs = require('safe-replace').create()
+const fs = require('fs')
+const sfs = require('safe-replace').create()
+const debug = require('debug')
+const log = debug('pyconf')
 
 function snakeCase (key) {
   // TODO let user supply list of exceptions
@@ -55,7 +57,7 @@ function parsePythonConf (str, cb) {
 
     obj[key] = val
     if (typeof keys[key] !== 'undefined') {
-      console.warn("unexpected duplicate key '" + key + "': '" + val + "'")
+      debug('unexpected duplicate key %s: \'%s\'', key, val)
     }
 
     keys[key] = i
@@ -126,8 +128,8 @@ function stringifyPythonConf (obj, cb) {
     }
 
     if (!obj.__lines[num] || !obj.__lines[num].indexOf) {
-      console.warn('[pyconf] WARN index past array length:')
-      console.log(obj.__lines.length, num, obj.__lines[num])
+      debug('[pyconf] WARN index past array length:')
+      debug(obj.__lines.length, num, obj.__lines[num])
       return
     }
 
